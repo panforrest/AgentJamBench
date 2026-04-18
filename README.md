@@ -9,6 +9,17 @@ Agent evaluation workbench for **Enterprise Agent Jam NYC** — run the same ben
 - Fred Yan  
 - Jin Thakur  
 
+## Tech stack
+
+| Layer | Technologies |
+|--------|----------------|
+| **Backend** | Python 3, **Django 5**, **Django REST Framework** |
+| **Database** | **SQLite** (default; swap for Postgres/MySQL in production if needed) |
+| **Config & HTTP** | **python-dotenv** (`.env` for secrets), **httpx** (Baseten / HTTP calls) |
+| **API & CORS** | **django-cors-headers** (React or other frontends on another origin) |
+| **LLM integrations** | **OpenAI** Python SDK (baseline runs + LLM-as-judge), **Baseten** via deployment URL + API key |
+| **Frontend (planned)** | **React**, **TypeScript**, **Vite** — dashboard UI consuming this API |
+
 ## Quick start
 
 ```bash
