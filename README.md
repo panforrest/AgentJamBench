@@ -43,6 +43,9 @@ npm run dev                  # http://127.0.0.1:5173 — proxies /api → Django
 
 Open the Vite URL in your browser. The UI loads suite info, runs the benchmark (OpenAI and/or Baseten), lists recent runs, and links to per-run detail.
 
+- **`http://127.0.0.1:8000/`** — short HTML landing page with API links (not the React app).  
+- **`http://127.0.0.1:5173/`** — full dashboard (run `npm run dev` in `frontend/`).
+
 - API health: `GET http://127.0.0.1:8000/api/health/`  
 - See `MVP_SPEC_FOR_CURSOR.md` for API routes and build notes.
 

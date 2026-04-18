@@ -17,7 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from bench.views import root_landing
+
 urlpatterns = [
+    path('', root_landing, name='root'),
     path('admin/', admin.site.urls),
     path('api/', include('bench.urls')),
 ]

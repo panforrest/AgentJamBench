@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import Any
 
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -18,6 +19,38 @@ from .services.pricing import estimate_cost_usd
 from .services.providers import call_baseten, call_openai
 from .services.validation import run_deterministic
 from .suite_loader import load_suite
+
+
+def root_landing(_request):
+    """Serve `/` so visiting port 8000 is not a 404 — API + UI hints."""
+    body = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AgentJamBench</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 42rem; margin: 2rem auto; padding: 0 1rem;
+      line-height: 1.5; color: #111; background: #fafafa; }
+    code { background: #eee; padding: 2px 6px; border-radius: 4px; }
+    a { color: #2563eb; }
+    ul { padding-left: 1.2rem; }
+  </style>
+</head>
+<body>
+  <h1>AgentJamBench</h1>
+  <p>Django is running. JSON APIs live under <code>/api/</code>.</p>
+  <p>The <strong>web dashboard</strong> is the Vite app (port <strong>5173</strong>), not this port.</p>
+  <ul>
+    <li><a href="/api/health/">GET /api/health/</a></li>
+    <li><a href="/api/suites/default/">GET /api/suites/default/</a></li>
+    <li><a href="/api/runs/">GET /api/runs/</a></li>
+  </ul>
+  <p>Run the UI: <code>cd frontend && npm run dev</code> →
+    <a href="http://127.0.0.1:5173">http://127.0.0.1:5173</a></p>
+</body>
+</html>"""
+    return HttpResponse(body, content_type="text/html; charset=utf-8")
 
 
 def _usage_tokens(usage: dict[str, Any] | None) -> tuple[int | None, int | None]:
