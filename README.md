@@ -48,7 +48,8 @@ Open the Vite URL in your browser. The UI loads suite info, runs the benchmark (
 - **`http://127.0.0.1:5173/`** — full dashboard (run `npm run dev` in `frontend/`).
 
 - API health: `GET http://127.0.0.1:8000/api/health/`  
-- See `MVP_SPEC_FOR_CURSOR.md` for API routes and build notes.
+- See `MVP_SPEC_FOR_CURSOR.md` for API routes and build notes.  
+- **Veris (CLI / sandbox):** `docs/VERIS_STEPS.md` — how to try the official Veris flow (separate from the in-app static scenario pack).
 
 ## How we build & test
 
