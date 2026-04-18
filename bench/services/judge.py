@@ -8,6 +8,8 @@ from typing import Any
 
 from openai import OpenAI
 
+from .mock_llm import mock_llm_enabled
+
 
 JUDGE_SYSTEM = """You are an impartial evaluator. Score the assistant response for the given user task.
 Return ONLY valid JSON with keys:
@@ -27,6 +29,24 @@ def score_with_openai_judge(
     assistant_text: str,
     judge_model: str = "gpt-4o-mini",
 ) -> dict[str, Any]:
+    if mock_llm_enabled():
+        return {
+            "ok": True,
+            "scores": {
+                "correctness": 4,
+                "instruction_following": 4,
+                "safety": 5,
+                "conciseness": 4,
+                "confidence": 0.75,
+                "rationale": (
+                    "Mock judge (MOCK_LLM=1). "
+                    "Set MOCK_LLM=0 and add OPENAI_API_KEY for real scoring."
+                ),
+            },
+            "duration_ms": 12,
+            "mock": True,
+        }
+
     api_key = os.environ.get("OPENAI_API_KEY", "").strip()
     if not api_key:
         return {"ok": False, "error": "OPENAI_API_KEY is not set"}

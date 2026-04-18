@@ -7,6 +7,8 @@ from typing import Any
 import httpx
 from openai import OpenAI
 
+from .mock_llm import mock_llm_enabled, mock_reply_for_prompt
+
 
 def _extract_chat_text(data: dict[str, Any]) -> str:
     choices = data.get("choices") or []
@@ -30,6 +32,23 @@ def call_openai(
     temperature: float,
     max_tokens: int,
 ) -> dict[str, Any]:
+    if mock_llm_enabled():
+        t0 = time.perf_counter()
+        text = mock_reply_for_prompt(prompt)
+        dt_ms = max(15, int((time.perf_counter() - t0) * 1000) + 12)
+        return {
+            "ok": True,
+            "text": text,
+            "duration_ms": dt_ms,
+            "usage": {
+                "prompt_tokens": 80,
+                "completion_tokens": 120,
+                "total_tokens": 200,
+            },
+            "raw_model": model,
+            "mock": True,
+        }
+
     api_key = os.environ.get("OPENAI_API_KEY", "").strip()
     if not api_key:
         return {
@@ -84,6 +103,22 @@ def call_baseten(
     temperature: float,
     max_tokens: int,
 ) -> dict[str, Any]:
+    if mock_llm_enabled():
+        t0 = time.perf_counter()
+        text = mock_reply_for_prompt(prompt)
+        dt_ms = max(18, int((time.perf_counter() - t0) * 1000) + 15)
+        return {
+            "ok": True,
+            "text": text,
+            "duration_ms": dt_ms,
+            "usage": {
+                "prompt_tokens": 80,
+                "completion_tokens": 120,
+                "total_tokens": 200,
+            },
+            "mock": True,
+        }
+
     url = os.environ.get("BASETEN_DEPLOYMENT_URL", "").strip()
     api_key = os.environ.get("BASETEN_API_KEY", "").strip()
     if not url or not api_key:

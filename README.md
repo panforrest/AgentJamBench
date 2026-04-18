@@ -29,6 +29,7 @@ python3 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 cp .env.example .env        # add API keys; never commit .env
+# Rehearsal without keys: set MOCK_LLM=1 in .env (default in template). Use MOCK_LLM=0 for real APIs.
 python manage.py migrate
 python manage.py runserver   # http://127.0.0.1:8000
 ```
