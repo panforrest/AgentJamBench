@@ -1,5 +1,7 @@
 # Secrets — never commit
 .env
+# Veris CLI (if you run `veris env create` inside this repo)
+.veris/
 .env.local
 .env.*.local
 
