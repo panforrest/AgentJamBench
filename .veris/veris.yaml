@@ -1,0 +1,17 @@
+version: '1.0'
+agentjambench:
+  services:
+  - name: salesforce
+  actor:
+    channels:
+    - type: http
+      url: http://localhost:8008
+      request:
+        message_field: message
+      response:
+        message_field: response
+  agent:
+    name: Enterprise-Model-Eval-Agent
+    code_path: /agent
+    entry_point: uv run --no-sync uvicorn app.main:app --host 0.0.0.0 --port 8008
+    port: 8008

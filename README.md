@@ -1,6 +1,18 @@
 # AgentJamBench
 
-Agent evaluation workbench for **Enterprise Agent Jam NYC** — run the same benchmark tasks across multiple models (e.g., OpenAI + Baseten), compare latency, estimated cost, and judge scores, and review full run details via the API.
+## Introduction
+
+**AgentJamBench** is a hackathon project for **Enterprise Agent Jam NYC**. It is an agent evaluation workbench: you run a **shared task suite** against **more than one model provider**, store results in one place, and compare **speed, estimated cost, and quality** in a small dashboard—useful for demos and for iterating on prompts and model choice.
+
+## Core features
+
+- **Multi-provider runs** — Same tasks through **OpenAI** and **Baseten** (HTTP deployment), with normalized responses and timing.
+- **Suite & batch benchmarks** — Default **Scenario Pack** (JSON task suite), single-task and full-suite runs via the REST API.
+- **LLM-as-judge** — Rubric-style scoring (with a **mock** path when `MOCK_LLM=1` for offline rehearsal).
+- **Run history & drill-down** — Persisted runs and per-task results for review in the **React + Vite** UI (`frontend/`).
+- **Veris-friendly stub** — Root **`app/`** FastAPI stub + **`pyproject.toml`** for **`veris env push`** / sandbox alignment (separate from the Django API).
+
+For API routes and build notes, see `MVP_SPEC_FOR_CURSOR.md`. For Veris CLI and sandbox steps, see `docs/VERIS_STEPS.md`.
 
 ## Team
 
