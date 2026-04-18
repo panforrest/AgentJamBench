@@ -64,7 +64,7 @@ After `veris login`, if `veris` is on the **same PATH** Django uses:
 - **`GET /api/veris/probe/`** — confirms the CLI is visible to the server + runs `veris --version`.
 - **`GET /api/veris/scenarios/`** — runs **`veris scenarios list`** and returns stdout (scenario sets in your Veris account).
 
-If Django was started from a GUI launcher and cannot find `veris`, set **`VERIS_CLI_PATH`** in `.env` to the full path of the binary (e.g. from `which veris`).
+If Django still cannot find `veris`, set **`VERIS_CLI_PATH`** in `.env` to the full path (from `which veris`). The backend also tries **`~/.local/bin/veris`** (typical **pipx** location) even when that directory is missing from `PATH`.
 
 This is **“import scenarios from Veris”** at the **list/metadata** level. Mapping those sets into our SQLite benchmark format is extra work. **Running inside the simulator** still requires **`veris env create`**, **`veris env push`**, and **`veris simulations create`** — not bundled into this endpoint.
 
