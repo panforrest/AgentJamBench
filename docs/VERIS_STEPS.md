@@ -57,6 +57,17 @@ Official docs: [Veris Quickstart](https://docs.veris.ai/quickstart) · [CLI inst
 - **Full Veris integration** = packaging your agent, Veris build/push, scenarios — often **hours**, not minutes.
 - **For judging today**, it’s OK to say: **scenario pack is Veris-aligned**; **full sandbox + CLI pipeline** is **next step** after the event.
 
+## AgentJamBench API bridge (lightweight)
+
+After `veris login`, if `veris` is on the **same PATH** Django uses:
+
+- **`GET /api/veris/probe/`** — confirms the CLI is visible to the server + runs `veris --version`.
+- **`GET /api/veris/scenarios/`** — runs **`veris scenarios list`** and returns stdout (scenario sets in your Veris account).
+
+If Django was started from a GUI launcher and cannot find `veris`, set **`VERIS_CLI_PATH`** in `.env` to the full path of the binary (e.g. from `which veris`).
+
+This is **“import scenarios from Veris”** at the **list/metadata** level. Mapping those sets into our SQLite benchmark format is extra work. **Running inside the simulator** still requires **`veris env create`**, **`veris env push`**, and **`veris simulations create`** — not bundled into this endpoint.
+
 ## Optional: Python SDK (different use case)
 
 For **tool mocking / FastAPI MCP** inside simulations, see [`veris-ai` on PyPI](https://pypi.org/project/veris-ai/) — useful when your code runs **inside** Veris’s simulation, not required for our current Django benchmark UI.

@@ -18,6 +18,7 @@ from .services.judge import score_with_openai_judge
 from .services.pricing import estimate_cost_usd
 from .services.providers import call_baseten, call_openai
 from .services.validation import run_deterministic
+from .services.veris_cli import run_veris, veris_binary
 from .suite_loader import load_suite
 
 
@@ -45,6 +46,8 @@ def root_landing(_request):
     <li><a href="/api/health/">GET /api/health/</a></li>
     <li><a href="/api/suites/default/">GET /api/suites/default/</a></li>
     <li><a href="/api/runs/">GET /api/runs/</a></li>
+    <li><a href="/api/veris/probe/">GET /api/veris/probe/</a> (Veris CLI visible?)</li>
+    <li><a href="/api/veris/scenarios/">GET /api/veris/scenarios/</a> (veris scenarios list)</li>
   </ul>
   <p>Run the UI: <code>cd frontend && npm run dev</code> →
     <a href="http://127.0.0.1:5173">http://127.0.0.1:5173</a></p>
@@ -376,4 +379,54 @@ class RunDetailView(APIView):
                     for r in rows
                 ],
             }
+        )
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class VerisCliProbeView(APIView):
+    """Whether ``veris`` is visible to the Django process + ``veris --version`` if available."""
+
+    authentication_classes: list = []
+    permission_classes: list = []
+
+    def get(self, request: Request) -> Response:
+        b = veris_binary()
+        if not b:
+            return Response(
+                {
+                    "veris_found": False,
+                    "hint": "Add ~/.local/bin to PATH or set VERIS_CLI_PATH in .env",
+                }
+            )
+        v = run_veris(["--version"], timeout=15.0)
+        return Response(
+            {
+                "veris_found": True,
+                "binary": b,
+                "version": v,
+            }
+        )
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class VerisScenariosListView(APIView):
+    """
+    Runs ``veris scenarios list`` — lists scenario sets from your Veris account (CLI → sandbox API).
+    This is the closest thing to “import scenarios from Veris” without reverse-engineering private REST.
+    """
+
+    authentication_classes: list = []
+    permission_classes: list = []
+
+    def get(self, request: Request) -> Response:
+        out = run_veris(["scenarios", "list"], timeout=120.0)
+        st = status.HTTP_200_OK if out.get("ok") else status.HTTP_502_BAD_GATEWAY
+        return Response(
+            {
+                "source": "veris_cli",
+                "command": "veris scenarios list",
+                "result": out,
+                "note": "Full simulator runs require veris env create / push / simulations — see docs/VERIS_STEPS.md",
+            },
+            status=st,
         )
