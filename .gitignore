@@ -20,6 +20,8 @@ media/
 staticfiles/
 
 # Node / frontend (when added)
+# Ignore accidental `npm` at repo root (use frontend/package-lock.json only)
+/package-lock.json
 node_modules/
 dist/
 build/
