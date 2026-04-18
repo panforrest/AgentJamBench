@@ -279,6 +279,35 @@ def _summarize_run(run_id: int) -> dict[str, Any]:
 
 
 @method_decorator(csrf_exempt, name="dispatch")
+class RunListView(APIView):
+    authentication_classes: list = []
+    permission_classes: list = []
+
+    def get(self, request: Request) -> Response:
+        try:
+            limit = int(request.query_params.get("limit", 30))
+        except ValueError:
+            limit = 30
+        limit = max(1, min(limit, 100))
+        runs = BenchmarkRun.objects.all()[:limit]
+        return Response(
+            {
+                "runs": [
+                    {
+                        "id": r.id,
+                        "created_at": r.created_at,
+                        "suite_id": r.suite_id,
+                        "status": r.status,
+                        "meta": r.meta,
+                        "summary": _summarize_run(r.id),
+                    }
+                    for r in runs
+                ]
+            }
+        )
+
+
+@method_decorator(csrf_exempt, name="dispatch")
 class RunDetailView(APIView):
     authentication_classes: list = []
     permission_classes: list = []

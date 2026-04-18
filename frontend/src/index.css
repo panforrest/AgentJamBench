@@ -1,0 +1,33 @@
+:root {
+  --bg: #0c0d12;
+  --surface: #12131a;
+  --surface2: #181a24;
+  --border: #2a2d3a;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.88em;
+}
