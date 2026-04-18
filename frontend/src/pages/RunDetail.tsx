@@ -2,6 +2,19 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getRun, type RunDetailResponse } from '../api'
 
+function errorSummary(err: unknown): string {
+  if (err && typeof err === 'object' && 'message' in err) {
+    const m = (err as { message?: unknown }).message
+    if (typeof m === 'string') return m.length > 160 ? `${m.slice(0, 160)}…` : m
+  }
+  try {
+    const s = JSON.stringify(err)
+    return s.length > 160 ? `${s.slice(0, 160)}…` : s
+  } catch {
+    return 'Unknown error'
+  }
+}
+
 export function RunDetail() {
   const { runId } = useParams<{ runId: string }>()
   const id = runId ? parseInt(runId, 10) : NaN
@@ -108,7 +121,13 @@ export function RunDetail() {
                 <span className="badge">{r.provider}</span> {r.task_id}{' '}
                 {r.duration_ms != null ? `· ${r.duration_ms} ms` : ''}
                 {r.error ? (
-                  <span className="badge bad">error</span>
+                  <>
+                    <span className="badge bad">error</span>
+                    <span className="err-inline" title={errorSummary(r.error)}>
+                      {' '}
+                      {errorSummary(r.error)}
+                    </span>
+                  </>
                 ) : null}
               </summary>
               <div className="task-body">

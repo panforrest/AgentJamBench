@@ -220,3 +220,9 @@
 .small {
   font-size: 0.82rem;
 }
+
+.err-inline {
+  font-size: 0.78rem;
+  color: #fca5a5;
+  font-weight: normal;
+}
